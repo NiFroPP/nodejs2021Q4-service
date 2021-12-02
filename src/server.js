@@ -9,6 +9,7 @@ fastify.register(require('fastify-swagger'), {
 });
 
 fastify.register(require('./routes/users.router'));
+fastify.register(require('./routes/boards.router'));
 
 const { PORT } = require('./common/config');
 
