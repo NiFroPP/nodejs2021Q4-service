@@ -1,19 +1,20 @@
 const { v4 } = require('uuid');
-let boards = require('../Boards');
+const boards = require('../Boards');
 
 const getBoards = (request, reply) => reply.send(boards);
 
-const getBoard = (request, reply) => {
+function getBoard(request, reply) {
   const { id } = request.params;
 
   const board = boards.find((b) => b.id === id);
 
-  if (!board) reply.code(404).send({ message: `Board '${id}' not exist` });
+  if (!board)
+    return reply.code(404).send({ message: `Board '${id}' not exist` });
 
-  reply.send(board);
-};
+  return reply.send(board);
+}
 
-const addBoard = (request, reply) => {
+function addBoard(request, reply) {
   const { title, columns } = request.body;
 
   const board = {
@@ -22,30 +23,34 @@ const addBoard = (request, reply) => {
     columns,
   };
 
-  boards = [...boards, board];
+  boards.push(board);
 
-  reply.code(201).send(board);
-};
+  return reply.code(201).send(board);
+}
 
-const updateBoard = (request, reply) => {
+function updateBoard(request, reply) {
   const { id } = request.params;
   const { title, columns } = request.body;
 
-  boards = boards.map((elem) =>
-    elem.id === id ? { id, title, columns } : elem
-  );
+  const boardIndex = boards.findIndex((curr) => curr.id === id);
+  if (boardIndex === -1)
+    return reply.code(404).send({ message: `Board '${id}' not exist` });
 
-  const board = boards.find((elem) => elem.id === id);
+  boards[boardIndex] = { ...boards[boardIndex], title, columns };
 
-  reply.send(board);
-};
+  return reply.send(boards[boardIndex]);
+}
 
-const deleteBoard = (request, reply) => {
+function deleteBoard(request, reply) {
   const { id } = request.params;
 
-  boards = boards.filter((elem) => elem.id !== id);
+  const boardIndex = boards.findIndex((b) => b.id === id);
+  if (boardIndex === -1)
+    return reply.code(404).send({ message: `Board '${id}' not exist` });
 
-  reply.send({ message: `User '${id}' has been removed` });
-};
+  boards.splice(boardIndex, 1);
+
+  return reply.send({ message: `User '${id}' has been removed` });
+}
 
 module.exports = { getBoards, getBoard, addBoard, updateBoard, deleteBoard };

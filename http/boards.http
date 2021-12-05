@@ -1,0 +1,40 @@
+/// BOARDS
+
+### GET All Boards
+GET http://localhost:4000/boards HTTP/1.1
+
+### GET Single Board
+GET http://localhost:4000/boards/board_id_2 HTTP/1.1
+
+### Create Board
+POST http://localhost:4000/boards HTTP/1.1
+Content-Type: application/json
+
+{
+  "title": "title",
+  "columns": [
+    {
+      "columnId": "1",
+      "title": "Task",
+      "order": "11"
+    }
+  ]
+}
+
+### DELETE Board
+DELETE  http://localhost:4000/boards/board_id_2 HTTP/1.1
+
+### Update Board
+PUT http://localhost:4000/boards/b0391ab6-370d-49ab-bd43-5a413c24b30a HTTP/1.1
+Content-Type: application/json
+
+{
+  "title": "update_title",
+  "columns": [
+    {
+      "columnId": "1",
+      "title": "update_Task",
+      "order": "11"
+    }
+  ]
+}

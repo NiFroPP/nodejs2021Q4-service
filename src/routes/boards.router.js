@@ -42,15 +42,14 @@ const getBoardOpts = {
 // Options for POST single board
 const postBoardOpts = {
   schema: {
-    // body: {
-    //   type: 'object',
-    //   required: ['name', 'login', 'password'],
-    //   properties: {
-    //     name: { type: 'string' },
-    //     login: { type: 'string' },
-    //     password: { type: 'string' },
-    //   },
-    // },
+    body: {
+      type: 'object',
+      required: ['title', 'columns'],
+      properties: {
+        title: { type: 'string' },
+        columns: { type: 'array' },
+      },
+    },
     response: {
       201: Board,
     },
