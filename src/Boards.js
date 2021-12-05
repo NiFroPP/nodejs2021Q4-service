@@ -1,76 +1,71 @@
 const Boards = [
-  // {
-  //   id: 'board_id_1',
-  //   title: 'board_title_2',
-  //   columns: [
-  //     {
-  //       columnId: 'column_id_1_1',
-  //       title: 'Task_1',
-  //       order: [
-  //         {
-  //           taskId: 'task_1',
-  //           title: 'task_title_1_1_1',
-  //           order: '1',
-  //           description: 'This is task_1',
-  //           userId: '1',
-  //           boardId: 'board_id_1',
-  //           columnId: 'column_id_1_1',
-  //         },
-  //         {
-  //           taskId: 'task_2',
-  //           title: 'task_title_1_1_2',
-  //           order: '1',
-  //           description: 'This is task_2',
-  //           userId: '1',
-  //           boardId: 'board_id_1',
-  //           columnId: 'column_id_1_1',
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       columnId: 'column_id_1_2',
-  //       title: 'Task_2',
-  //       order: [
-  //         {
-  //           taskId: 'task_1_2_1',
-  //           title: 'task_title_1',
-  //           order: '1',
-  //           description: 'This is task_1',
-  //           userId: '1',
-  //           boardId: 'board_id_1',
-  //           columnId: 'column_id_1_2',
-  //         },
-  //         {
-  //           taskId: 'task_1_2_1',
-  //           title: 'task_title_2',
-  //           order: '1',
-  //           description: 'This is task_2',
-  //           userId: '1',
-  //           boardId: 'board_id_1',
-  //           columnId: 'column_id_1_2',
-  //         },
-  //       ],
-  //     },
-  //   ],
-  // },
   {
-    id: 'board_id_2',
+    id: '1',
+    title: 'board_title_1',
+    columns: [
+      {
+        id: '11',
+        title: 'Tasks_1',
+        order: [
+          {
+            id: '111',
+            title: 'task_title_3',
+            order: '2',
+            description: 'This is task_2',
+            userId: 'user',
+            boardId: '1',
+            columnId: '11',
+          },
+          {
+            id: '112',
+            title: 'task_title_3',
+            order: '2',
+            description: 'This is task_2',
+            userId: 'user',
+            boardId: '1',
+            columnId: '11',
+          },
+        ],
+      },
+      {
+        id: '12',
+        title: 'Tasks_2',
+        order: [],
+      },
+    ],
+  },
+  {
+    id: '2',
     title: 'board_title_2',
     columns: [
       {
-        columnId: 'column_id_2_1',
-        title: 'Task_1',
+        id: '21',
+        title: 'Tasks_1',
         order: [
           {
-            taskId: 'task_2_1_1',
+            id: '211',
             title: 'task_title_1',
             order: '1',
             description: 'This is task_1',
-            userId: '1',
-            boardId: 'board_id_2',
-            columnId: 'column_id_2_1',
+            userId: 'user',
+            boardId: '2',
+            columnId: '21',
+          },
+          {
+            id: '212',
+            title: 'task_title_3',
+            order: '2',
+            description: 'This is task_2',
+            userId: 'user',
+            boardId: '2',
+            columnId: '21',
           },
         ],
+      },
+      {
+        id: '22',
+        title: 'Tasks_2',
+        order: [],
       },
     ],
   },

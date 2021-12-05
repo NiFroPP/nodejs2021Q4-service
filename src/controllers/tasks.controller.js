@@ -1,109 +1,123 @@
 const { v4 } = require('uuid');
 const boards = require('../Boards');
 
-const returnAllTasksByBoardId = (request, reply) => {
+function returnAllTasksByBoardId(request, reply) {
   const { boardId } = request.params;
-
-  console.log(boards);
 
   const board = boards.find((b) => b.id === boardId);
   if (!board)
     return reply.code(404).send({ message: `Board '${boardId}' not exist` });
 
-  return board.columns.map((task) => task.order);
-};
+  const allTaskByBoard = board.columns.map((task) => task.order);
+  return allTaskByBoard.flat();
+}
 
-const returnTaskById = (request, reply) => {
+function getTasks(request, reply) {
+  const tasks = returnAllTasksByBoardId(request, reply);
+
+  return reply.send(tasks);
+}
+
+function getTask(request, reply) {
   const { taskId } = request.params;
 
   const tasks = returnAllTasksByBoardId(request, reply);
 
-  const task = tasks.flat().find((t) => t.taskId === taskId);
+  const task = tasks.find((t) => t.id === taskId);
   if (!task)
     return reply.code(404).send({ message: `Task '${taskId}' not exist` });
 
-  return task;
-};
-
-const getTasks = (request, reply) => {
-  const tasks = returnAllTasksByBoardId(request, reply);
-
-  return reply.send(tasks.flat());
-};
-
-const getTask = (request, reply) => {
-  const task = returnTaskById(request, reply);
-
   return reply.send(task);
-};
+}
 
-const addTask = (request, reply) => {
-  const { title, columns, order, description, userId, columnId } = request.body;
+function addTask(request, reply) {
+  const { title, order, description, columnId } = request.body;
   const { boardId } = request.params;
 
   const board = boards.find((b) => b.id === boardId);
-  if (!board) reply.code(404).send({ message: `Board '${boardId}' not exist` });
+  if (!board)
+    return reply.code(404).send({ message: `Board '${boardId}' not exist` });
 
-  const column = board.columns.find((c) => c.columnId === columnId);
+  const column = board.columns.find((c) => c.id === columnId);
   if (!column)
-    reply.code(404).send({ message: `Column '${columnId}' not exist` });
+    return reply.code(404).send({ message: `Column '${columnId}' not exist` });
 
   const newTask = {
     id: v4(),
     title,
-    columns,
     order,
     description,
-    userId,
+    userId: 'user',
     boardId,
     columnId,
   };
 
   column.order.push(newTask);
 
-  reply.code(201).send(newTask);
-};
+  return reply.code(201).send(newTask);
+}
 
-const updateTask = (request, reply) => {
-  const { title, order, description, userId, columnId } = request.body;
+function updateTask(request, reply) {
+  const { title, order, description } = request.body;
   const { boardId, taskId } = request.params;
-  const newTask = {
-    id: taskId,
+  const updTask = {
     title,
     order,
     description,
-    userId,
-    boardId,
-    columnId,
   };
 
+  const tasks = returnAllTasksByBoardId(request, reply);
+
+  const task = tasks.find((t) => t.id === taskId);
+  if (!task)
+    return reply.code(404).send({ message: `Task '${taskId}' not exist` });
+
   const board = boards.find((b) => b.id === boardId);
-  if (!board) reply.code(404).send({ message: `Board '${boardId}' not exist` });
+  if (!board)
+    return reply.code(404).send({ message: `Board '${boardId}' not exist` });
 
-  const column = board.columns.find((c) => c.columnId === columnId);
+  const column = board.columns.find((c) => c.id === task.columnId);
   if (!column)
-    reply.code(404).send({ message: `Column '${columnId}' not exist` });
+    return reply
+      .code(404)
+      .send({ message: `Column '${task.columnId}' not exist` });
 
-  column.order = column.order.map((o) => (o.taskId === taskId ? newTask : o));
+  // column.order = column.order.map((o) => (o.taskId === taskId ? updTask : o));
 
-  board.columns = board.columns.map((c) =>
-    c.columnId === columnId ? { ...c, order: column.order } : c
-  );
+  // boards[task.boardId].columns[task.columnId] = {
+  //   ...boards[task.boardId].columns[task.columnId],
+  //   updTask,
+  // };
 
-  return reply.send(newTask);
-};
+  return reply.send(updTask);
 
-const deleteTask = (request, reply) => {
+  // const boardIndex = boards.findIndex((curr) => curr.id === id);
+  // if (boardIndex === -1)
+  //   return reply.code(404).send({ message: `Board '${id}' not exist` });
+
+  // boards[boardIndex] = { ...boards[boardIndex], title, columns };
+
+  // return reply.send(boards[boardIndex]);
+}
+
+function deleteTask(request, reply) {
   const { boardId, taskId } = request.params;
 
-  const task = returnTaskById(request, reply);
+  const tasks = returnAllTasksByBoardId(request, reply);
+
+  const task = tasks.find((t) => t.id === taskId);
+  if (!task)
+    return reply.code(404).send({ message: `Task '${taskId}' not exist` });
 
   const board = boards.find((b) => b.id === boardId);
-  if (!board) reply.code(404).send({ message: `Board '${boardId}' not exist` });
+  if (!board)
+    return reply.code(404).send({ message: `Board '${boardId}' not exist` });
 
   const column = board.columns.find((c) => c.columnId === task.columnId);
   if (!column)
-    reply.code(404).send({ message: `Column '${task.columnId}' not exist` });
+    return reply
+      .code(404)
+      .send({ message: `Column '${task.columnId}' not exist` });
 
   column.order = column.order.filter((t) => t.taskId !== taskId);
 
@@ -111,7 +125,7 @@ const deleteTask = (request, reply) => {
     c.columnId === task.columnId ? { ...c, order: column.order } : c
   );
 
-  reply.send({ message: `Task '${taskId}' has been removed` });
-};
+  return reply.send({ message: `Task '${taskId}' has been removed` });
+}
 
 module.exports = { getTasks, getTask, addTask, updateTask, deleteTask };

@@ -12,7 +12,14 @@ const Board = {
   properties: {
     id: { type: 'string' },
     title: { type: 'string' },
-    columns: { type: 'array' },
+    columns: {
+      type: 'array',
+      properties: {
+        id: { type: 'string' },
+        title: { type: 'string' },
+        order: { type: 'array' },
+      },
+    },
   },
 };
 
