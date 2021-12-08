@@ -1,13 +1,5 @@
-const {
-  getUsers,
-  getUser,
-  addUser,
-  deleteUser,
-  updateUser,
-} = require('../controllers/users.controller');
-
 // user schema
-const User = {
+const UserSchema = {
   type: 'object',
   properties: {
     id: { type: 'string' },
@@ -17,7 +9,7 @@ const User = {
   },
 };
 
-const UserWithPass = {
+const UserSchemaWithoutPass = {
   type: 'object',
   properties: {
     id: { type: 'string' },
@@ -27,34 +19,32 @@ const UserWithPass = {
 };
 
 // Options for GET all users
-const getUsersOpts = {
+const users = {
   schema: {
     response: {
       200: {
         type: 'array',
-        items: UserWithPass,
+        items: UserSchemaWithoutPass,
       },
     },
   },
-  handler: getUsers,
 };
 
 // Options for GET user
-const getUserOpts = {
+const user = {
   schema: {
     response: {
-      200: UserWithPass,
+      200: UserSchemaWithoutPass,
     },
   },
-  handler: getUser,
 };
 
 // Options for POST user
-const postUserOpts = {
+const postUser = {
   schema: {
     body: {
       type: 'object',
-      required: ['name', 'login', 'password'],
+      // required: ['name', 'login', 'password'],
       properties: {
         name: { type: 'string' },
         login: { type: 'string' },
@@ -62,14 +52,13 @@ const postUserOpts = {
       },
     },
     response: {
-      201: UserWithPass,
+      201: UserSchemaWithoutPass,
     },
   },
-  handler: addUser,
 };
 
 // Options for DELETE user
-const deleteUserOpts = {
+const deleteUser = {
   schema: {
     response: {
       200: {
@@ -80,36 +69,21 @@ const deleteUserOpts = {
       },
     },
   },
-  handler: deleteUser,
 };
 
 // Options for PUT (update) user
-const updateUserOpts = {
+const updateUser = {
   schema: {
     response: {
-      200: User,
+      200: UserSchema,
     },
   },
-  handler: updateUser,
 };
 
-const usersRoutes = async (fastify, options, done) => {
-  // GET all users
-  await fastify.get('/users', getUsersOpts);
-
-  // GET single user
-  await fastify.get('/users/:id', getUserOpts);
-
-  // Add new user
-  await fastify.post('/users', postUserOpts);
-
-  // Delete single user
-  await fastify.delete('/users/:id', deleteUserOpts);
-
-  // Update single user
-  await fastify.put('/users/:id', updateUserOpts);
-
-  done();
+export default {
+  users,
+  user,
+  postUser,
+  deleteUser,
+  updateUser,
 };
-
-module.exports = usersRoutes;
