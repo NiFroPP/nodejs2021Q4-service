@@ -1,6 +1,6 @@
 import { FastifyInstance, FastifyServerOptions } from 'fastify';
-import opts from './user.schema';
-import userService from './user.service';
+import opts from './users.schemas';
+import userService from './users.services';
 
 interface IParams {
   userId: string;

@@ -1,5 +1,5 @@
-import usersRepo, { IUser } from './user.memory.repository';
-import User from './user.model';
+import usersRepo, { IUser } from './users.repository';
+import User from './users.model';
 
 const getAllUsers = () => usersRepo.getAll();
 
