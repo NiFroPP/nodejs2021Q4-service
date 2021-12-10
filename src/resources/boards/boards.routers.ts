@@ -1,6 +1,7 @@
 import { FastifyInstance, FastifyServerOptions } from 'fastify';
 import opts from './boards.schemas';
 import boardService from './boards.services';
+import tasksService from '../tasks/tasks.services';
 import { IColumn } from './boards.repository';
 
 interface IParams {
@@ -30,14 +31,14 @@ const boardsRoutes = (
     async (request, reply) => {
       const { boardId } = request.params;
 
-      const board = await boardService.getBoardById(boardId);
-
-      if (!board)
+      try {
+        const board = await boardService.getBoardById(boardId);
+        return reply.send(board);
+      } catch (e) {
         return reply
           .code(404)
           .send({ message: `Board '${boardId}' not exist` });
-
-      return reply.send(board);
+      }
     }
   );
 
@@ -60,6 +61,7 @@ const boardsRoutes = (
       const { boardId } = request.params;
 
       await boardService.deleteBoard(boardId);
+      await tasksService.deleteTaskFromBoard(boardId);
 
       reply.send({ message: `Board '${boardId}' has been removed` });
     }

@@ -1,6 +1,7 @@
 import { FastifyInstance, FastifyServerOptions } from 'fastify';
 import opts from './users.schemas';
 import userService from './users.services';
+import tasksService from '../tasks/tasks.services';
 
 interface IParams {
   userId: string;
@@ -58,6 +59,7 @@ const usersRoutes = (
       const { userId } = request.params;
 
       await userService.deleteUser(userId);
+      await tasksService.deleteUserIdFromTask(userId);
 
       reply.send({ message: `User '${userId}' has been removed` });
     }

@@ -1,5 +1,6 @@
 import { IUser } from '../resources/users/users.repository';
 import { IBoard } from '../resources/boards/boards.repository';
+import { ITask } from '../resources/tasks/tasks.repository';
 
 export default {
   users: [
@@ -23,4 +24,15 @@ export default {
       ],
     },
   ] as Array<IBoard>,
+  tasks: [
+    {
+      id: '1',
+      title: 'title_task',
+      order: 1,
+      description: 'description_task',
+      userId: '1',
+      boardId: '1',
+      columnId: null,
+    },
+  ] as Array<ITask>,
 };
