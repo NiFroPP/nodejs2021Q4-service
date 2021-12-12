@@ -6,6 +6,7 @@
     "jest": true,
     "node": true
   },
+  "parser":  "@typescript-eslint/parser",
   "parserOptions": {
     "sourceType": "module",
     "ecmaVersion": 2021,
@@ -18,15 +19,27 @@
   },
   "extends": [
     "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
     "plugin:node/recommended",
     "airbnb-base",
     "prettier"
   ],
   "rules": {
     "import/extensions": "off",
+    "import/prefer-default-export": "off",
+    "import/no-unresolved": "off",
+    "import/no-extraneous-dependencies": "off",
     "linebreak-style": "off",
     "node/no-unsupported-features/es-syntax": "off",
+    "node/no-missing-import": ["error", {
+      "allowModules": [],
+      "resolvePaths": ["/path/to/a/modules/directory"],
+      "tryExtensions": [".js", ".ts", ".json", ".node"]
+    }],
+    "node/no-unpublished-import": "off",
     "no-underscore-dangle": "off",
-    "import/prefer-default-export": "off"
+    "no-console": "off",
+    "@typescript-eslint/no-var-requires": "off"
   }
 }
+
